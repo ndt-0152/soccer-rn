@@ -8,22 +8,55 @@ import Animated, {
   useSharedValue,
   withTiming,
   useAnimatedStyle,
+  useAnimatedGestureHandler,
+  withRepeat,
+  withSequence,
+  withDelay,
+  withSpring,
 } from 'react-native-reanimated';
 import HomeScreen from '../screens/home';
 import DetailsScreen from '../screens/details';
 import ProfileScreen from '../screens/profile';
 import EditProfile from '../screens/editprofile';
 import {ButtonRN, ViewRN} from '../components/atoms';
+import {StyleSheet} from 'react-native';
+import {
+  gestureHandlerRootHOC,
+  TapGestureHandler,
+} from 'react-native-gesture-handler';
 
 const HomeStack = createNativeStackNavigator();
 const ProfileStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const AnimatedComponent = () => {
+const AnimatedComponent = gestureHandlerRootHOC(() => {
   const progress = useSharedValue(0);
-
+  const start = useSharedValue(0);
+  const active = useSharedValue(0);
+  const end = useSharedValue(0);
   const reanimatedStyles = useAnimatedStyle(() => {
     return {transform: [{translateX: progress.value * 255}]};
+  });
+
+  const uas = useAnimatedStyle(() => {
+    return {
+      transform: [{translateX: start.value * 255}],
+      backgroundColor: active.value ? 'red' : 'blue',
+      width: end.value ? 100 : 50,
+    };
+  });
+
+  const onGestureEvent = useAnimatedGestureHandler<any>({
+    //onStart(event,ctx)=>{}
+    onStart: () => {
+      start.value = withTiming(Math.random(), {duration: 2000});
+    },
+    onActive: () => {
+      active.value = withTiming(Math.random(), {duration: 2000});
+    },
+    onEnd: () => {
+      end.value = withTiming(Math.random(), {duration: 2000});
+    },
   });
 
   return (
@@ -37,12 +70,27 @@ const AnimatedComponent = () => {
       <ButtonRN
         title="View More"
         onPress={() => {
-          progress.value = withTiming(Math.random(), {duration: 2000});
+          progress.value = withSequence(
+            withDelay(2000, withSpring(Math.random())),
+            withRepeat(withTiming(Math.random(), {duration: 2000}), 3, true),
+          );
         }}
       />
+      <TapGestureHandler onGestureEvent={onGestureEvent}>
+        <Animated.View style={[styles.ball, uas]} />
+      </TapGestureHandler>
     </ViewRN>
   );
-};
+});
+
+const styles = StyleSheet.create({
+  ball: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    backgroundColor: 'blue',
+  },
+});
 
 const HomeNav = () => {
   return (
@@ -80,7 +128,11 @@ const ProfileNav = () => {
 export const AppRouter = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{headerShown: false}}>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {backgroundColor: 'lightorange'},
+        }}>
         <Tab.Screen
           name="Home"
           component={HomeNav}
