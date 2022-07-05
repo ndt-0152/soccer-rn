@@ -131,7 +131,7 @@ export const AppRouter = () => {
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
-          tabBarStyle: {backgroundColor: 'lightorange'},
+          tabBarStyle: {backgroundColor: 'lightgreen'},
         }}>
         <Tab.Screen
           name="Home"
