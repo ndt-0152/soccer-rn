@@ -16,7 +16,7 @@ const HomeScreen: React.FC = () => {
   };
 
   return (
-    <ViewRN style={{padding: 20}}>
+    <ViewRN style={{padding: 20, backgroundColor: 'white'}}>
       <Text>HomeScreen</Text>
       <ScrollView>
         {LIST_DATA.map((item, idx) => {
