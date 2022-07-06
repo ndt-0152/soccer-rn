@@ -1,15 +1,39 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Platform, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {ImageRN, InputRN, TextRN, ViewRN} from '../../atoms';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const IMAGE = 100;
 
 export const EditProfile = React.memo(() => {
   const bs = React.createRef<any>();
+  const [imageUrl, setImageUrl] = useState(
+    'https://assets.materialup.com/uploads/d7b3d0b4-f6a7-44b6-be7e-988fba7069a6/preview.png',
+  );
+
+  const openCamera = () => {
+    ImageCropPicker.openCamera({width: 300, height: 400, cropping: true})
+      .then(image => {
+        console.log(image);
+        setImageUrl(image.path);
+        bs.current.snapTo(1);
+      })
+      .catch(e => console.log('err', e));
+  };
+
+  const openLibrary = () => {
+    ImageCropPicker.openPicker({width: 300, height: 400, cropping: true}).then(
+      image => {
+        console.log(image);
+        setImageUrl(image.path);
+        bs.current.snapTo(1);
+      },
+    );
+  };
 
   const renderInner = () => (
     <ViewRN style={styles.panel}>
@@ -19,10 +43,10 @@ export const EditProfile = React.memo(() => {
           Choose Your Profile Picture
         </TextRN>
       </ViewRN>
-      <TouchableOpacity style={styles.panelButton}>
+      <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
         <TextRN style={styles.panelButtonTitle}>Take Photo</TextRN>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.panelButton}>
+      <TouchableOpacity style={styles.panelButton} onPress={openLibrary}>
         <TextRN style={styles.panelButtonTitle}>Choose From Library</TextRN>
       </TouchableOpacity>
       <TouchableOpacity
@@ -41,6 +65,16 @@ export const EditProfile = React.memo(() => {
     </ViewRN>
   );
 
+  useEffect(() => {
+    ImageCropPicker.clean()
+      .then(() => {
+        console.log('removed all tmp images from tmp directory');
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }, []);
+
   return (
     <ViewRN style={styles.container}>
       <BottomSheet
@@ -56,7 +90,7 @@ export const EditProfile = React.memo(() => {
           <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
             <ImageRN
               source={{
-                uri: 'https://assets.materialup.com/uploads/d7b3d0b4-f6a7-44b6-be7e-988fba7069a6/preview.png',
+                uri: imageUrl,
               }}
               style={styles.avatar}
             />
