@@ -1,14 +1,10 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {ViewRN} from '../../atoms';
-import {CardRN} from '../../organisms';
+// import {CardRN} from '../../organisms';
 
 export const ClubTemplate = React.memo(() => {
-  return (
-    <ViewRN style={styles.container}>
-      <CardRN />
-    </ViewRN>
-  );
+  return <ViewRN style={styles.container}>{/* <CardRN /> */}</ViewRN>;
 });
 
 const styles = StyleSheet.create({

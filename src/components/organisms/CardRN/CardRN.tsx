@@ -1,18 +1,20 @@
 import React from 'react';
 import {Card, Paragraph, Title} from 'react-native-paper';
 
-export const CardRN: React.FC = React.memo(() => {
+export interface ICardRN {
+  id: string;
+  src: string;
+  name: string;
+  des: string;
+}
+
+export const CardRN: React.FC<ICardRN> = React.memo(({src, name, des, id}) => {
   return (
-    <Card>
-      <Card.Cover source={{uri: 'https://picsum.photos/700'}} />
+    <Card onPress={() => console.log(id)} mode="outlined">
+      <Card.Cover source={{uri: src}} />
       <Card.Content>
-        <Title>Manchester United</Title>
-        <Paragraph>
-          Manchester United, in full Manchester United Football Club, is an
-          English professional football (soccer) team based in Manchester,
-          England. It is one of the richest and best-supported football clubs
-          not only in England but in the entire world.
-        </Paragraph>
+        <Title>{name}</Title>
+        <Paragraph numberOfLines={1}>{des}</Paragraph>
       </Card.Content>
     </Card>
   );
