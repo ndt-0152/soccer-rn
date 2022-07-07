@@ -100,20 +100,29 @@ const styles = StyleSheet.create({
 const HomeNav = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeNav"
       screenOptions={{
         headerTitleAlign: 'center',
       }}>
       <HomeStack.Screen
-        name="Home"
+        name="HomeNav"
         component={HomeScreen}
         options={{
           headerRight: () => {
             return <Icon name="search" size={16} />;
           },
+          headerStyle: {backgroundColor: 'lightyellow'},
+          title: 'Home',
         }}
       />
-      <HomeStack.Screen name="Details" component={SoccerDetail} />
+      <HomeStack.Screen
+        name="Details"
+        component={SoccerDetail}
+        options={{
+          title: 'Detail Match',
+          headerStyle: {backgroundColor: 'lightyellow'},
+        }}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -121,12 +130,25 @@ const HomeNav = () => {
 const DrawerNav = () => {
   return (
     <DrawerStack.Navigator
-      initialRouteName="Football Clubs"
       screenOptions={{
         headerTitleAlign: 'center',
       }}>
-      <DrawerStack.Screen name="Football Clubs" component={FCScreen} />
-      <DrawerStack.Screen name="Club" component={ClubScreen} />
+      <DrawerStack.Screen
+        name="FootballFC"
+        component={FCScreen}
+        options={{
+          headerStyle: {backgroundColor: 'lightyellow'},
+          title: 'Football Clubs',
+        }}
+      />
+      <DrawerStack.Screen
+        name="Club"
+        component={ClubScreen}
+        options={{
+          headerStyle: {backgroundColor: 'lightyellow'},
+          title: 'Information Club',
+        }}
+      />
     </DrawerStack.Navigator>
   );
 };
@@ -138,9 +160,7 @@ const ProfileNav = () => {
   };
 
   return (
-    <ProfileStack.Navigator
-      screenOptions={{headerTitleAlign: 'center'}}
-      initialRouteName="Profile">
+    <ProfileStack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
       <ProfileStack.Screen
         name="Profile"
         component={ProfileScreen}
@@ -150,9 +170,18 @@ const ProfileNav = () => {
               <Icon name="edit" size={16} onPress={handlePressProfileIcon} />
             );
           },
+          title: 'My Profile',
+          headerStyle: {backgroundColor: 'lightyellow'},
         }}
       />
-      <ProfileStack.Screen name="EditProfile" component={EditProfile} />
+      <ProfileStack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          title: 'Edit Profile',
+          headerStyle: {backgroundColor: 'lightyellow'},
+        }}
+      />
     </ProfileStack.Navigator>
   );
 };
@@ -160,13 +189,12 @@ const ProfileNav = () => {
 export const TabComponent = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {backgroundColor: 'lightgreen'},
       }}>
       <Tab.Screen
-        name="Home"
+        name="HomeTab"
         component={HomeNav}
         options={{
           tabBarIcon: ({color, size}) => {
@@ -174,10 +202,11 @@ export const TabComponent = () => {
           },
           tabBarActiveTintColor: 'blue',
           tabBarInactiveTintColor: 'black',
+          title: 'Home',
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="ProfileTab"
         component={ProfileNav}
         options={{
           tabBarIcon: ({color, size}) => {
@@ -185,10 +214,11 @@ export const TabComponent = () => {
           },
           tabBarActiveTintColor: 'blue',
           tabBarInactiveTintColor: 'black',
+          title: 'Profile',
         }}
       />
       <Tab.Screen
-        name="Animated"
+        name="AnimatedTab"
         component={AnimatedComponent}
         options={{
           tabBarIcon: ({color, size}) => {
@@ -196,6 +226,7 @@ export const TabComponent = () => {
           },
           tabBarActiveTintColor: 'blue',
           tabBarInactiveTintColor: 'black',
+          title: 'Animated',
         }}
       />
     </Tab.Navigator>
@@ -206,7 +237,11 @@ export const AppRouter = () => {
   return (
     <NavigationContainer>
       <Drawer.Navigator screenOptions={{headerShown: false}}>
-        <Drawer.Screen name="Home" component={TabComponent} />
+        <Drawer.Screen
+          name="HomeDrawer"
+          component={TabComponent}
+          options={{title: 'Home'}}
+        />
         <Drawer.Screen name="Football Clubs" component={DrawerNav} />
       </Drawer.Navigator>
     </NavigationContainer>
